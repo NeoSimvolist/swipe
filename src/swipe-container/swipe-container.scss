@@ -1,15 +1,15 @@
-.swipe-container {
+:host {
     display: flex;
     position: relative;
     overflow: hidden;
-}
 
-.swipe-item {
-    flex-grow: 1;
-    touch-action: none;
-    min-width: 0;
+    ::slotted(.swipe-item) {
+        flex-grow: 1;
+        touch-action: none;
+        min-width: 0;
+    }
 
-    &--virtual {
+    ::slotted(.swipe-item--virtual) {
         position: absolute;
         z-index: 0;
         top: 0;
@@ -18,12 +18,14 @@
         height: 100%;
     }
 
-    &--active {
+    ::slotted(.swipe-item--active) {
         position: relative;
         z-index: 1;
     }
 
-    &--hide {
-        display: none;
+    ::slotted(.swipe-item--hide) {
+        display: none !important;
     }
 }
+
+

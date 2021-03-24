@@ -1,4 +1,6 @@
-import './swipe-container.scss';
+// @ts-ignore
+import style from '!css-loader!sass-loader!./swipe-container.scss';
+import {LitElement, customElement, unsafeCSS, html} from 'lit-element';
 
 interface Point {
     x: number;
@@ -89,7 +91,7 @@ export class SwipeContainer {
     removeItem(index: number) {
         if (index > (this.items.length - 1)) return;
         if (this.currentItemIndex === index) {
-            this.currentItem.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemHide, {bubbles: true}));
+            this.currentItem.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemHide, {bubbles: true, composed: true}));
             this.unsetCurrentItem();
             this.items[index].remove();
             return;
@@ -199,7 +201,7 @@ export class SwipeContainer {
         this.setCurrentItem(this.gestureEndedOnIndex);
         visibleItems.forEach(item => {
             if (!item || [this.leftVirtualItem, this.rightVirtualItem, this.currentItem].includes(item)) return;
-            item.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemHide, {bubbles: true}));
+            item.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemHide, {bubbles: true, composed: true}));
         });
     }
 
@@ -269,7 +271,7 @@ export class SwipeContainer {
             this.leftVirtualItem = this.currentItemIndex === 0 ? null : this.items[this.currentItemIndex - 1];
             if (this.leftVirtualItem) {
                 this.leftVirtualItem.classList.remove('swipe-item--hide');
-                this.leftVirtualItem.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemShow, {bubbles: true}));
+                this.leftVirtualItem.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemShow, {bubbles: true, composed: true}));
             }
         }
 
@@ -277,7 +279,7 @@ export class SwipeContainer {
             this.rightVirtualItem = this.currentItemIndex === this.items.length - 1 ? null : this.items[this.currentItemIndex + 1];
             if (this.rightVirtualItem) {
                 this.rightVirtualItem.classList.remove('swipe-item--hide');
-                this.rightVirtualItem.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemShow, {bubbles: true}));
+                this.rightVirtualItem.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemShow, {bubbles: true, composed: true}));
             }
         }
     }
@@ -303,25 +305,30 @@ export class SwipeContainer {
         if (this.currentItem) return;
         if (this.options.currentItemIndex >= this.items.length) return;
         this.setCurrentItem(this.options.currentItemIndex);
-        this.currentItem.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemShow, {bubbles: true}));
+        this.currentItem.dispatchEvent(new CustomEvent(SwipeItemEvents.SwipeItemShow, {bubbles: true, composed: true}));
     }
 }
 
-export class SwipeContainerElement extends HTMLElement {
+@customElement('ns-swipe-container')
+export class SwipeContainerElement extends LitElement {
+
+    static get styles() {
+        return unsafeCSS(style);
+    }
 
     swipeContainer: SwipeContainer;
 
-    constructor() {
-        super();
+    render() {
+        return html`<slot></slot>`;
     }
 
     connectedCallback() {
+        super.connectedCallback();
         this.swipeContainer = new SwipeContainer(this);
     }
 
     disconnectedCallback() {
         this.swipeContainer.destroy();
+        super.disconnectedCallback();
     }
 }
-
-customElements.define('ns-swipe-container', SwipeContainerElement);

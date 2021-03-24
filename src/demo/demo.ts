@@ -1,7 +1,7 @@
 import './demo.scss';
 import {SwipeContainerElement, SwipeItemEvents} from '../swipe-container/swipe-container';
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener('WebComponentsReady', () => {
     const element = document.getElementsByClassName('panel-container')?.item(0) as SwipeContainerElement;
     element.addEventListener(SwipeItemEvents.SwipeItemShow, event => {
        console.log('show', element.swipeContainer.items.indexOf(event.target as HTMLElement));
