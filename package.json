@@ -39,5 +39,10 @@
     "prepublishOnly": "npm run build"
   },
   "author": "Leonid Nikiforov",
-  "license": "ISC"
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NeoSimvolist/swipe.git"
+  },
+  "homepage": "https://github.com/NeoSimvolist/swipe#readme"
 }
