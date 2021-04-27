@@ -12,7 +12,7 @@ module.exports = (env, argv) => {
             path: path.resolve(__dirname, outputDir)
         },
         experiments: {
-            outputModule: true
+            outputModule: isModule
         },
         resolve: {
             extensions: ['.ts', '.js'],
@@ -64,8 +64,8 @@ module.exports = (env, argv) => {
 
     if (isModule) {
         config.entry = {
-            bundle: {
-                import: './src/bundle.ts',
+            swipe: {
+                import: './src/swipe.ts',
                 library: {
                     type: 'module'
                 }
@@ -74,15 +74,12 @@ module.exports = (env, argv) => {
     } else {
         config.entry = {
             polyfills: './src/demo/polyfills.js',
-            bundle: {
-                import: './src/bundle.ts',
-                library: {
-                    type: 'module'
-                }
+            swipe: {
+                import: './src/swipe.ts'
             },
             demo: {
                 import: './src/demo/demo.ts',
-                dependOn: 'bundle'
+                dependOn: 'swipe'
             }
         };
         config.plugins.push(new HtmlWebpackPlugin({

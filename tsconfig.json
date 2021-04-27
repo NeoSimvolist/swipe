@@ -16,6 +16,6 @@
     ]
   },
   "files": [
-    "./src/bundle.ts"
+    "./src/swipe.ts"
   ]
 }

@@ -1,10 +1,10 @@
 {
   "name": "@neosimvolist/swipe",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
-  "main": "dist/bundle.js",
-  "module": "dist/esm2015.bundle.js",
-  "types": "dist/bundle.d.ts",
+  "main": "dist/swipe.js",
+  "module": "dist/esm2015.swipe.js",
+  "types": "dist/swipe.d.ts",
   "dependencies": {
     "lit-element": "^2.4.0"
   },
