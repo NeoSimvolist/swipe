@@ -1,6 +1,6 @@
 {
   "name": "@neosimvolist/swipe",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "dist/bundle.js",
   "module": "dist/esm2015.bundle.js",
