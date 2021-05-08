@@ -34,7 +34,7 @@ module.exports = (env, argv) => {
                                 '@babel/preset-typescript'
                             ],
                             plugins: [
-                                ['@babel/plugin-proposal-decorators', {legacy: true}],
+                                ['@babel/plugin-proposal-decorators', {decoratorsBeforeExport: true}],
                                 '@babel/plugin-proposal-class-properties'
                             ]
                         }
@@ -70,6 +70,18 @@ module.exports = (env, argv) => {
                     type: 'module'
                 }
             },
+            overlay: {
+                import: './src/overlay.ts',
+                library: {
+                    type: 'module'
+                }
+            },
+            grid: {
+                import: './src/grid.ts',
+                library: {
+                    type: 'module'
+                }
+            },
         };
     } else {
         config.entry = {
@@ -77,9 +89,15 @@ module.exports = (env, argv) => {
             swipe: {
                 import: './src/swipe.ts'
             },
+            overlay: {
+                import: './src/overlay.ts'
+            },
+            grid: {
+                import: './src/grid.ts'
+            },
             demo: {
                 import: './src/demo/demo.ts',
-                dependOn: 'swipe'
+                // dependOn: ['swipe', 'overlay', 'grid']
             }
         };
         config.plugins.push(new HtmlWebpackPlugin({

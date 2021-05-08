@@ -16,6 +16,7 @@
     ]
   },
   "files": [
-    "./src/swipe.ts"
+    "./src/swipe.ts",
+    "./src/grid.ts"
   ]
 }

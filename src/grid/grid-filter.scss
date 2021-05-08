@@ -1,0 +1,14 @@
+:host {
+  font-family: 'ns-grid-filter-icon';
+  margin-left: 4px;
+  color: var(--ns-grid-color-no-active);
+  cursor: pointer;
+}
+
+:host(:hover) {
+  color: var(--ns-grid-color-no-active-accent);
+}
+
+:host:before {
+  content: '\e900';
+}
