@@ -1,11 +1,13 @@
 // @ts-ignore
 import style from '!css-loader!sass-loader!./grid.scss';
-import {LitElement, customElement, unsafeCSS, property, state, query, html} from 'lit-element';
-import {styleMap} from 'lit-html/directives/style-map';
+import {LitElement, unsafeCSS, html} from 'lit';
+import {customElement, property, state, query} from 'lit/decorators.js';
+import {styleMap} from 'lit/directives/style-map';
 import {IGridColumnResizeProcessDetail} from './grid-head';
 import {virtualScrollDriver} from '../core/virtual-scroll-driver';
 import {debounce} from "debounce";
 import {GridEvents, IGridColumn, IGridColumnState, TGridColumnsState} from './_models';
+import {literal, html as unsafeHtml} from 'lit/static-html.js';
 
 @customElement('ns-grid')
 export class Grid extends LitElement {
@@ -102,7 +104,8 @@ export class Grid extends LitElement {
     renderHeadCellFilter(column: IGridColumn, columnState: IGridColumnState) {
         if (!column.filterable) return null;
         // TODO реализовать возможность менять тип фильтра (ns-grid-filter-select)
-        return html`<ns-grid-filter-select .name="${column.name}" .filter="${columnState?.filter}" slot="filter"></ns-grid-filter-select>`;
+        const tagName = literal`ns-grid-filter-select`;
+        return unsafeHtml`<${tagName} .name="${column.name}" .filter="${columnState?.filter}" slot="filter"></${tagName}>`;
     }
 
     renderBodyRow(row: unknown, columns: IGridColumn[]) {

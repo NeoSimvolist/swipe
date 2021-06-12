@@ -1,6 +1,7 @@
 // @ts-ignore
 import style from '!css-loader!sass-loader!./swipe-container.scss';
-import {LitElement, customElement, unsafeCSS, html} from 'lit-element';
+import {LitElement, unsafeCSS, html} from 'lit';
+import {customElement} from 'lit/decorators.js';
 
 interface Point {
     x: number;

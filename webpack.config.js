@@ -43,6 +43,8 @@ module.exports = (env, argv) => {
                     include: [
                         path.resolve(__dirname, 'node_modules/lit-element'),
                         path.resolve(__dirname, 'node_modules/lit-html'),
+                        path.resolve(__dirname, 'node_modules/lit'),
+                        path.resolve(__dirname, 'node_modules/@lit'),
                         path.resolve(__dirname, 'src')
                     ]
                 },

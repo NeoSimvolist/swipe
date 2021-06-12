@@ -1,6 +1,7 @@
 // @ts-ignore
 import style from '!css-loader!sass-loader!./grid-filter-select.scss';
-import {customElement, html, LitElement, property, query, unsafeCSS} from 'lit-element';
+import {LitElement, unsafeCSS, html} from 'lit';
+import {customElement, property, query} from 'lit/decorators.js';
 import {GridEvents} from './_models';
 
 @customElement('ns-grid-filter-select')

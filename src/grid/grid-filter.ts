@@ -1,6 +1,7 @@
 // @ts-ignore
 import style from '!css-loader!sass-loader!./grid-filter.scss';
-import {customElement, html, LitElement, property, state, unsafeCSS} from 'lit-element';
+import {LitElement, unsafeCSS, html} from 'lit';
+import {customElement, property, state} from 'lit/decorators.js';
 import {GridEvents} from './_models';
 import {OverlayEvents} from '../overlay/_models';
 

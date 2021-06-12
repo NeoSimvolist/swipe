@@ -1,6 +1,7 @@
 // @ts-ignore
 import style from '!css-loader!sass-loader!./grid-head.scss';
-import {customElement, html, LitElement, unsafeCSS} from 'lit-element';
+import {LitElement, unsafeCSS, html} from 'lit';
+import {customElement} from 'lit/decorators.js';
 import {GridEvents} from './_models';
 import {IGridColumnResizeStartDetail} from './grid-head-cell';
 

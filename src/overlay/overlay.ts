@@ -1,6 +1,7 @@
 // @ts-ignore
 import style from '!css-loader!sass-loader!./overlay.scss';
-import {customElement, html, LitElement, property, unsafeCSS} from 'lit-element';
+import {LitElement, unsafeCSS, html} from 'lit';
+import {customElement, property} from 'lit/decorators.js';
 import {OverlayEvents} from './_models';
 
 @customElement('ns-overlay')
