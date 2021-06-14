@@ -1,20 +1,51 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./grid.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, css, html} from 'lit';
 import {customElement, property, state, query} from 'lit/decorators.js';
-import {styleMap} from 'lit/directives/style-map';
+import {styleMap} from 'lit/directives/style-map.js';
 import {IGridColumnResizeProcessDetail} from './grid-head';
 import {virtualScrollDriver} from '../core/virtual-scroll-driver';
-import {debounce} from "debounce";
 import {GridEvents, IGridColumn, IGridColumnState, TGridColumnsState} from './_models';
 import {literal, html as unsafeHtml} from 'lit/static-html.js';
+import debounce from 'debounce';
 
 @customElement('ns-grid')
 export class Grid extends LitElement {
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
+    static styles = css`
+        :host {
+          display: flex;
+          font-family: var(--ns-grid-font-family);
+          font-size: var(--ns-grid-font-size);
+        }
+        
+        :host .grid {
+          position: relative;
+          flex-grow: 1;
+          flex-direction: column;
+          border-spacing: 0;
+          overflow-y: auto;
+          overflow-anchor: none;
+        }
+        
+        :host .grid-body {
+          overflow: hidden;
+        }
+        
+        :host .grid-row {
+          display: flex;
+          flex-grow: 1;
+        }
+        
+        :host .grid-row:not(:last-child) {
+          border-bottom: 1px solid #dee2e6;
+        }
+        
+        :host .grid-cell {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+      `;
 
     @property({type: Array})
     columns: IGridColumn[];
@@ -127,7 +158,11 @@ export class Grid extends LitElement {
      * Испускает событие изменения ширины столбца
      */
     private columnResizeProcess = (event: CustomEvent<IGridColumnResizeProcessDetail>) => {
-        this.dispatchEvent(new CustomEvent(GridEvents.UpdateState, {bubbles: true, composed: true, detail: event.detail}));
+        this.dispatchEvent(new CustomEvent(GridEvents.UpdateState, {
+            bubbles: true,
+            composed: true,
+            detail: event.detail
+        }));
     }
 
     /**

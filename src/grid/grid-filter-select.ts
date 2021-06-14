@@ -1,15 +1,19 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./grid-filter-select.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import {customElement, property, query} from 'lit/decorators.js';
 import {GridEvents} from './_models';
 
 @customElement('ns-grid-filter-select')
 export class GridFilterSelect extends LitElement {
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
+    static styles = css`
+        :host {
+          overflow: hidden;
+          text-overflow: ellipsis;
+          top: 0;
+          position: relative;
+          box-sizing: border-box;
+        }
+    `;
 
     @property({type: String})
     name: string;

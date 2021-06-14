@@ -1,15 +1,21 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./overlay.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {OverlayEvents} from './_models';
 
 @customElement('ns-overlay')
 export class Overlay extends LitElement {
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
+    static styles = css`
+        :host {
+          position: fixed;
+          box-shadow: 4px 3px 8px -1px rgba(77, 77, 77, 0.2);
+          background-color: #fff;
+          border-radius: 4px;
+          pointer-events: auto;
+          z-index: 1;
+          outline: none;
+        }
+    `;
 
     @property({type: Object})
     origin: HTMLElement;

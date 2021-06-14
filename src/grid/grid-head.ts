@@ -1,6 +1,4 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./grid-head.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
 import {GridEvents} from './_models';
 import {IGridColumnResizeStartDetail} from './grid-head-cell';
@@ -17,9 +15,17 @@ export class GridHead extends LitElement {
     private resizeColumnInitialWidth: number | null;
     private resizeInitialClientX: number | null;
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
+    static styles = css`
+        :host {
+          display: flex;
+          flex-grow: 1;
+          position: sticky;
+          top: 0;
+          background-color: #fff;
+          user-select: none;
+          border-bottom: 2px solid #dee2e6;
+        }
+    `;
 
     connectedCallback() {
         super.connectedCallback();

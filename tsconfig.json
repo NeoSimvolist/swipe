@@ -2,7 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "target": "es2015",
+    "target": "es2020",
     "module": "es2020",
     "outDir": "./dist",
     "rootDir": "./src",
@@ -10,9 +10,14 @@
     "removeComments": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "strict": false,
+    "allowSyntheticDefaultImports": true,
+    "importHelpers": true,
+    "inlineSources": true,
+    "sourceMap": true,
     "lib": [
       "dom",
-      "es2015"
+      "es2017"
     ]
   },
   "files": [

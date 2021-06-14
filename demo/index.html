@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+    <meta charset="utf-8">
+    <style>
+        body {
+            --ns-grid-font-family: 'Roboto', sans-serif;
+            --ns-grid-font-size: 14px;
+            --ns-grid-color-no-active: #ced2d6;
+            --ns-grid-color-no-active-accent: #bfc3c7;
+            --ns-grid-color-active: #2196f3;
+            --ns-grid-color-active-accent: #1063a3;
+        }
+
+        .container {
+            width: 1000px;
+            margin: 10vh auto;
+        }
+
+        #grid {
+            height: 200px;
+        }
+    </style>
+</head>
+<body>
+<div class="container" id="demo">
+</div>
+
+<script type="module">
+    import { html, render } from 'lit';
+    import {GridEvents, GridSort} from '../dist/grid.bundled.js';
+
+    render(
+        html`
+        <ns-grid id="grid">
+        </ns-grid>
+      `,
+        document.querySelector('#demo')
+    );
+
+    function getRows(count) {
+        let rows = [];
+        for (let i = 0; i < count; i++) {
+            rows = [...rows, {id: i, name: `test${i}`}]
+        }
+        return rows;
+    }
+
+    customElements.whenDefined('ns-grid').then(() => {
+        const element = document.getElementById('grid');
+        element.setAttribute('columns', JSON.stringify([
+            {
+                name: 'id',
+                width: '50px',
+                resizable: true,
+                sortable: true
+            },
+            {
+                name: 'name',
+                width: '100px',
+                resizable: true,
+                sortable: true,
+                filterable: true
+            }
+        ]));
+
+        element.addEventListener(GridEvents.ColumnSort, (event) => {
+            const {name: sortColumnName, sort} = event.detail;
+            let rows = getRows(100);
+
+            if (!sortColumnName || sort === GridSort.NONE) {
+                element.setColumnState(event.detail.name, {sort: GridSort.NONE});
+                element.rows = rows;
+                return;
+            }
+
+            if (sort === GridSort.ASC) {
+                element.setColumnState(event.detail.name, {sort: GridSort.ASC});
+                element.rows = rows.sort((a, b) => {
+                    if (typeof a[sortColumnName] === 'string') return a[sortColumnName].localeCompare(b[sortColumnName]);
+                    return a[sortColumnName] - b[sortColumnName];
+                });
+                return;
+            }
+
+            element.setColumnState(event.detail.name, {sort: GridSort.DESC});
+            element.rows = rows.sort((a, b) => {
+                if (typeof a[sortColumnName] === 'string') return b[sortColumnName].localeCompare(a[sortColumnName]);
+                return b[sortColumnName] - a[sortColumnName];
+            });
+        });
+
+        element.addEventListener(GridEvents.ScrollDown, (event) => {
+            element.rows = [...element.rows, ...getRows(100)];
+        });
+
+        element.addEventListener(GridEvents.ColumnFilter, (event) => {
+            if (event.detail.name !== 'name') return;
+            const rows = getRows(100);
+            element.rows = [...rows.filter(row => row.name.includes(event.detail.value))];
+        });
+
+        element.addEventListener(GridEvents.UpdateState, (event) => {
+            element.setColumnState(event.detail.name, {width: event.detail.width});
+        });
+
+        element.rows = getRows(100);
+    });
+</script>
+</body>
+</html>

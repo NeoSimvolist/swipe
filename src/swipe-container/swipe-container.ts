@@ -1,6 +1,4 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./swipe-container.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import {customElement} from 'lit/decorators.js';
 
 interface Point {
@@ -313,9 +311,37 @@ export class SwipeContainer {
 @customElement('ns-swipe-container')
 export class SwipeContainerElement extends LitElement {
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
+    static styles = css`
+        :host {
+            display: flex;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        :host ::slotted(.swipe-item), ns-swipe-container .swipe-item {
+            flex-grow: 1;
+            touch-action: none;
+            min-width: 0;
+        }
+        
+        :host ::slotted(.swipe-item--virtual), ns-swipe-container .swipe-item--virtual {
+            position: absolute;
+            z-index: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        :host ::slotted(.swipe-item--active), ns-swipe-container .swipe-item--active {
+            position: relative;
+            z-index: 1;
+        }
+        
+        :host ::slotted(.swipe-item--hide), ns-swipe-container .swipe-item--hide {
+            display: none !important;
+        }
+    `;
 
     swipeContainer: SwipeContainer;
 

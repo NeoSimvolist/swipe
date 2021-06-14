@@ -1,6 +1,4 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./grid-head-cell.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {GridSort} from './_models';
 
@@ -13,9 +11,26 @@ export interface IGridColumnResizeStartDetail {
 @customElement('ns-grid-head-cell')
 export class GridHeadCell extends LitElement {
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
+    static styles = css`
+        :host {
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          top: 0;
+          position: relative;
+          padding: 8px;
+          box-sizing: border-box;
+        }
+
+        :host ns-grid-filter {
+          margin-left: 4px;
+        }
+        
+        :host .grid-head-cell-slot {
+          flex-grow: 1;
+        }
+    `;
 
     @property({type: String})
     name: string;

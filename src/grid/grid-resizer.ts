@@ -1,6 +1,4 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./grid-resizer.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {GridEvents} from './_models';
 import {IGridColumnResizeStartDetail} from './grid-head-cell';
@@ -11,9 +9,17 @@ export class GridResizer extends LitElement {
     @property({type: String})
     name: string;
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
+    static styles = css`
+        :host {
+          position: absolute;
+          top: 0;
+          right: 0;
+          height: 100%;
+          width: 2px;
+          background-color: #dee2e6;
+          cursor: col-resize;
+        }
+    `;
 
     connectedCallback() {
         super.connectedCallback();

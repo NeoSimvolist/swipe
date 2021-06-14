@@ -1,4 +1,4 @@
-import './core/core.scss';
+import './overlay/overlay';
 
 export * from './grid/_models';
 export * from './grid/grid';

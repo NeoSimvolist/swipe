@@ -1,6 +1,4 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./grid-filter.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import {customElement, property, state} from 'lit/decorators.js';
 import {GridEvents} from './_models';
 import {OverlayEvents} from '../overlay/_models';
@@ -35,9 +33,22 @@ export class GridFilter extends LitElement {
     @property({type: Object})
     origin: HTMLElement;
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
+    static styles = css`
+        :host {
+          font-family: 'ns-grid-filter-icon';
+          margin-left: 4px;
+          color: var(--ns-grid-color-no-active);
+          cursor: pointer;
+        }
+        
+        :host(:hover) {
+          color: var(--ns-grid-color-no-active-accent);
+        }
+        
+        :host:before {
+          content: '\\e900';
+        }
+    `;
 
     connectedCallback() {
         super.connectedCallback();

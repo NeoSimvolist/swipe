@@ -1,6 +1,4 @@
-// @ts-ignore
-import style from '!css-loader!sass-loader!./grid-sorter.scss';
-import {LitElement, unsafeCSS, html} from 'lit';
+import {LitElement, html, css} from 'lit';
 import {customElement, property} from 'lit/decorators.js';
 import {GridEvents, GridSort} from './_models';
 
@@ -28,10 +26,50 @@ export class GridSorter extends LitElement {
     @property({type: String, reflect: true})
     sort: GridSort;
 
-    static get styles() {
-        return unsafeCSS(style);
-    }
-
+    static styles = css`
+        :host {
+          display: flex;
+          flex-grow: 1;
+          align-items: center;
+          cursor: pointer;
+          font-weight: bold;
+        }
+        
+        :host([sort='asc']), :host([sort='desc']) {
+          color: var(--ns-grid-color-active);
+        }
+        
+        :host([sort='asc']:hover), :host([sort='desc']:hover) {
+          color: var(--ns-grid-color-active-accent);
+        }
+        
+        :host .grid-sorter-none,
+        :host .grid-sorter-desc,
+        :host .grid-sorter-asc {
+          font-family: 'ns-grid-sorter-icon';
+          margin-left: 4px;
+        }
+        
+        :host .grid-sorter-none {
+          color: var(--ns-grid-color-no-active);
+        }
+        
+        :host(:hover) .grid-sorter-none {
+          color: var(--ns-grid-color-no-active-accent);
+        }
+        
+        :host .grid-sorter-none:before {
+          content: '\\e901';
+        }
+        
+        :host .grid-sorter-desc:before {
+          content: '\\e902';
+        }
+        
+        :host .grid-sorter-asc:before {
+          content: '\\e900';
+        }
+    `;
     connectedCallback() {
         super.connectedCallback();
         this.addEventListener('click', this.toggleColumnSort);
