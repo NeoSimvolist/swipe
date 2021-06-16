@@ -19,7 +19,8 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
         /** Use Hot Module Replacement by uncommenting. Requires @open-wc/dev-server-hmr plugin */
         // hmr && hmrPlugin({ exclude: ['**/*/node_modules/**/*'], presets: [presets.litElement] }),
         fromRollup(commonjs)({
-            include: ['node_modules/debounce/**.js'],
+            // TODO неудобно указывать относительный путь до файла, нужно стремиться к "node_modules/debounce/**.js"
+            include: ['**/debounce/**.js'],
             transformMixedEsModules: true
         }),
         hmrPlugin(),
@@ -33,7 +34,8 @@ export default /** @type {import('@web/dev-server').DevServerConfig} */ ({
                 custom: [
                     {
                         name: 'lit-polyfill-support',
-                        path: 'node_modules/lit/polyfill-support.js',
+                        // TODO неудобно указывать относительный путь до файла, нужно стремиться к "node_modules/lit/polyfill-support.js"
+                        path: '../../node_modules/lit/polyfill-support.js',
                         test: "!('attachShadow' in Element.prototype)",
                         module: false,
                     },
