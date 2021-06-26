@@ -91,6 +91,13 @@ export class Grid extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this.addEventListener(GridEvents.ColumnResizeProcess, this.columnResizeProcess, true);
+        queueMicrotask(() => {
+            this.dispatchEvent(new CustomEvent(GridEvents.Init, {
+                bubbles: true,
+                composed: true,
+                detail: this
+            }));
+        });
     }
 
     disconnectedCallback() {

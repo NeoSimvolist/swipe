@@ -24,6 +24,7 @@ export interface IGridColumnState {
 export type TGridColumnsState = { [columnName: string]: IGridColumnState };
 
 export enum GridEvents {
+    Init = 'Init',
     UpdateState = 'UpdateState',
     ColumnResizeStart = 'ColumnResizeStart',
     ColumnResizeProcess = 'ColumnResizeProcess',

@@ -28,18 +28,11 @@
 
 <script type="module">
     import { html, render } from 'lit';
-    import {GridEvents, GridSort} from '../dist/grid.js';
-
-    const init = event => {
-        console.log('event', event);
-    }
+    import {GridEvents, GridSort} from '@neosimvolist-ui/grid';
 
     render(
         html`
-        <ns-grid
-            id="grid"
-            @Init="${init}"
-        >
+        <ns-grid id="grid">
         </ns-grid>
       `,
         document.querySelector('#demo')
@@ -54,7 +47,11 @@
     }
 
     document.addEventListener(GridEvents.Init, event => {
-        const element = event.detail;
+       console.log(event.detail);
+    });
+
+    customElements.whenDefined('ns-grid').then(() => {
+        const element = document.getElementById('grid');
         element.setAttribute('columns', JSON.stringify([
             {
                 name: 'id',
@@ -112,10 +109,6 @@
         });
 
         element.rows = getRows(100);
-    });
-
-    customElements.whenDefined('ns-grid').then(() => {
-        console.log('ns-grid defined');
     });
 </script>
 </body>

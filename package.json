@@ -1,5 +1,5 @@
 {
-  "name": "neosimvolist",
+  "name": "neosimvolist-ui",
   "version": "1.0.0",
   "description": "",
   "workspaces": [
@@ -7,15 +7,22 @@
   ],
   "dependencies": {
     "debounce": "^1.2.1",
-    "lit": "^2.0.0-rc.2"
+    "lit": "^2.0.0-rc.2",
+    "@neosimvolist-ui/grid": "^1.0.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.14.6",
     "@rollup/plugin-commonjs": "^19.0.0",
+    "@storybook/addon-actions": "^6.3.0",
+    "@storybook/addon-essentials": "^6.3.0",
+    "@storybook/addon-links": "^6.3.0",
+    "@storybook/web-components": "^6.3.0",
     "@web/dev-server": "^0.1.17",
     "@web/dev-server-hmr": "^0.1.9",
     "@web/dev-server-legacy": "^0.1.7",
     "@web/dev-server-rollup": "^0.3.4",
     "@webcomponents/webcomponentsjs": "^2.5.0",
+    "babel-loader": "^8.2.2",
     "concurrently": "^6.2.0",
     "custom-event-polyfill": "^1.0.7",
     "rollup": "^2.51.2",
@@ -24,7 +31,11 @@
     "typescript": "^4.2.3"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-demo": "wds --hmr",
+    "start-grid": "npm run start -w=@neosimvolist-ui/grid",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook -o docs --docs"
   },
   "repository": {
     "type": "git",
