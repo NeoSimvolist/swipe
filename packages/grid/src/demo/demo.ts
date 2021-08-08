@@ -24,7 +24,8 @@ customElements.whenDefined('ns-grid').then(() => {
             width: '100px',
             resizable: true,
             sortable: true,
-            filterable: true
+            filterable: true,
+            filterTagName: 'ns-grid-filter-select'
         }
     ]));
 
