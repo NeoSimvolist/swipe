@@ -24,6 +24,8 @@ export class GridFilterSelect extends LitElement {
     @query('input')
     private inputEl: HTMLInputElement;
 
+    private rows = [1, 2, 4];
+
     async connectedCallback() {
         super.connectedCallback();
         await this.inputEl;
@@ -36,7 +38,7 @@ export class GridFilterSelect extends LitElement {
     }
 
     render() {
-        return html`<input type="text"/>`;
+        return html`<input type="text"/><ns-list .rows="${this.rows}"></ns-list>`;
     }
 
     inputChange = () => {

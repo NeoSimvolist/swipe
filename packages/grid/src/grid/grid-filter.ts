@@ -37,16 +37,17 @@ export class GridFilter extends LitElement {
         :host {
           font-family: 'ns-grid-filter-icon';
           margin-left: 4px;
-          color: var(--ns-grid-color-no-active);
+          
           cursor: pointer;
-        }
-        
-        :host(:hover) {
-          color: var(--ns-grid-color-no-active-accent);
         }
         
         :host:before {
           content: '\\e900';
+          color: var(--ns-grid-color-no-active);
+        }
+        
+        :host(:hover):before {
+          color: var(--ns-grid-color-no-active-accent);
         }
     `;
 

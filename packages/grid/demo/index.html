@@ -10,6 +10,13 @@
             --ns-grid-color-no-active-accent: #bfc3c7;
             --ns-grid-color-active: #2196f3;
             --ns-grid-color-active-accent: #1063a3;
+
+            --ns-list-font-family: 'Roboto', sans-serif;
+            --ns-list-font-size: 14px;
+            --ns-list-color-no-active: #ced2d6;
+            --ns-list-color-no-active-accent: #bfc3c7;
+            --ns-list-color-active: #2196f3;
+            --ns-list-color-active-accent: #1063a3;
         }
 
         .container {
@@ -18,6 +25,10 @@
         }
 
         #grid {
+            height: 200px;
+        }
+
+        #list {
             height: 200px;
         }
     </style>
@@ -29,11 +40,13 @@
 <script type="module">
     import { html, render } from 'lit';
     import {GridEvents, GridSort} from '../dist/grid.js';
+    import {ListEvents, List} from '../dist/list.js';
 
     const init = event => {
         console.log('event', event);
     }
 
+    const rows = [1, 2, 4];
     render(
         html`
         <ns-grid
@@ -41,14 +54,16 @@
             @Init="${init}"
         >
         </ns-grid>
+
+        <ns-list id="list" .rows="${rows}"></ns-list>
       `,
         document.querySelector('#demo')
     );
 
-    function getRows(count) {
+    function getRows(count, render = i => ({id: i, name: `test${i}`})) {
         let rows = [];
         for (let i = 0; i < count; i++) {
-            rows = [...rows, {id: i, name: `test${i}`}]
+            rows = [...rows, render(i)]
         }
         return rows;
     }
@@ -115,8 +130,16 @@
         element.rows = getRows(100);
     });
 
+    const listEl = document.getElementById('list');
+    listEl.rows = getRows(100, i => i);
+    console.log(listEl);
+
     customElements.whenDefined('ns-grid').then(() => {
         console.log('ns-grid defined');
+    });
+
+    customElements.whenDefined('ns-list').then(() => {
+        console.log('ns-list defined');
     });
 </script>
 </body>

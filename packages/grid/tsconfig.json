@@ -22,6 +22,7 @@
   },
   "files": [
     "./src/swipe.ts",
+    "./src/list.ts",
     "./src/grid.ts"
   ]
 }
