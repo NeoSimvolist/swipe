@@ -21,6 +21,8 @@
     ]
   },
   "files": [
+    "./src/rich-input.ts",
+    "./src/note-app.ts",
     "./src/swipe.ts",
     "./src/list.ts",
     "./src/grid.ts"

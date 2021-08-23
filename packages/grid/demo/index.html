@@ -41,6 +41,8 @@
     import { html, render } from 'lit';
     import {GridEvents, GridSort} from '../dist/grid.js';
     import {ListEvents, List} from '../dist/list.js';
+    import '../dist/rich-input.js';
+    import '../dist/note-app.js';
 
     const init = event => {
         console.log('event', event);
@@ -48,15 +50,18 @@
 
     const rows = [1, 2, 4];
     render(
-        html`
-        <ns-grid
-            id="grid"
-            @Init="${init}"
-        >
-        </ns-grid>
-
-        <ns-list id="list" .rows="${rows}"></ns-list>
-      `,
+      //   html`
+      //   <ns-grid
+      //       id="grid"
+      //       @Init="${init}"
+      //   >
+      //   </ns-grid>
+      //
+      //   <ns-list id="list" .rows="${rows}"></ns-list>
+      // `,
+          html`
+          <ns-note-app></ns-note-app>
+        `,
         document.querySelector('#demo')
     );
 
@@ -130,9 +135,9 @@
         element.rows = getRows(100);
     });
 
-    const listEl = document.getElementById('list');
-    listEl.rows = getRows(100, i => i);
-    console.log(listEl);
+    // const listEl = document.getElementById('list');
+    // listEl.rows = getRows(100, i => i);
+    // console.log(listEl);
 
     customElements.whenDefined('ns-grid').then(() => {
         console.log('ns-grid defined');
