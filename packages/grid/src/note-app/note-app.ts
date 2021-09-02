@@ -36,7 +36,7 @@ export class NoteApp extends LitElement {
 
         this.showLastNote();
         this.showNotes();
-        this.runGenerateData();
+        // this.runGenerateData();
     }
 
     onKeypress(event: KeyboardEvent) {
