@@ -6,26 +6,37 @@ import { noteService } from './db/note.service';
 export class NoteApp extends LitElement {
 
     static styles = css`
+      :host {
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+      }
+      ns-rich-input {
+        height: 70px;
+      }
       ns-list {
-        height: 100px;
+        flex: 1 1 auto;
+        min-height: 0;
       }
     `;
 
     noteService = noteService;
     value: string;
-    notes: Array<any> = [];
+    notes: string[] = [];
 
     render() {
         return html`
             <ns-rich-input .value="${this.value}" @richValueChange="${this.onRichInputChange}" @keypress="${this.onKeypress}"></ns-rich-input>
 <!--            <button @click="${this.onSubmit}">add</button><br>-->
-            <ns-list .rows="${this.notes}"></ns-list>
+            <ns-list .rows="${this.notes}" itemTagName="ns-note-list-note" minRowHeight="70"></ns-list>
         `;
     }
 
     firstUpdated() {
+
         this.showLastNote();
         this.showNotes();
+        this.runGenerateData();
     }
 
     onKeypress(event: KeyboardEvent) {
@@ -58,8 +69,21 @@ export class NoteApp extends LitElement {
     private showNotes() {
         this.noteService.search()
             .then(notes => {
-                this.notes = notes.map(note => note.value);
+                this.notes = notes.map(note => JSON.stringify(note));
                 this.requestUpdate();
             });
+    }
+
+    private runGenerateData() {
+        setInterval(() => {
+            fetch('https://fish-text.ru/get').then(response => response.json()).then((data: {text: string}) => {
+                if (!data?.text) return;
+                this.value = data.text
+                this.requestUpdate();
+                setTimeout(() => {
+                    this.onSubmit();
+                }, 300);
+            });
+        }, 1000);
     }
 }

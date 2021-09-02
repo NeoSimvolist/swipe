@@ -4,7 +4,7 @@ import {styleMap} from 'lit/directives/style-map.js';
 import {IGridColumnResizeProcessDetail} from './grid-head';
 import {virtualScrollDriver} from '../core/virtual-scroll-driver';
 import {GridEvents, IGridColumn, IGridColumnState, TGridColumnsState} from './_models';
-import {literal, html as unsafeHtml, unsafeStatic} from 'lit/static-html.js';
+import {literal, html as staticHtml, unsafeStatic} from 'lit/static-html.js';
 import debounce from 'debounce';
 
 @customElement('ns-grid')
@@ -142,7 +142,7 @@ export class Grid extends LitElement {
     renderHeadCellFilter(column: IGridColumn, columnState: IGridColumnState) {
         if (!column.filterable || !column.filterTagName) return null;
         const tagName = literal`${unsafeStatic(column.filterTagName)}`;
-        return unsafeHtml`<${tagName} .name="${column.name}" .filter="${columnState?.filter}" slot="filter"></${tagName}>`;
+        return staticHtml`<${tagName} .name="${column.name}" .filter="${columnState?.filter}" slot="filter"></${tagName}>`;
     }
 
     renderBodyRow(row: unknown, columns: IGridColumn[]) {

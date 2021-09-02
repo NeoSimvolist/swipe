@@ -4,6 +4,7 @@ import {styleMap} from 'lit/directives/style-map.js';
 import {virtualScrollDriver} from '../core/virtual-scroll-driver';
 import {ListEvents} from './_models';
 import debounce from 'debounce';
+import { literal, unsafeStatic, html as staticHtml } from 'lit/static-html.js';
 
 @customElement('ns-list')
 export class List extends LitElement {
@@ -54,6 +55,9 @@ export class List extends LitElement {
     @property({type: Number})
     minRowHeight: number = 35;
 
+    @property({type: String})
+    itemTagName: string;
+
     @query('.list')
     private listEl: HTMLElement;
 
@@ -82,6 +86,11 @@ export class List extends LitElement {
     }
 
     renderBodyRow(row: unknown) {
+        if (this.itemTagName) {
+            const tagName = literal`${unsafeStatic(this.itemTagName)}`;
+            return staticHtml`<${tagName} value="${row}"></${tagName}>`;
+        }
+
         return html`<div class="list-row">${row}</div>`;
     }
 
