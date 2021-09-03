@@ -27,7 +27,6 @@ export class NoteApp extends LitElement {
     render() {
         return html`
             <ns-rich-input .value="${this.value}" @richValueChange="${this.onRichInputChange}" @keypress="${this.onKeypress}"></ns-rich-input>
-<!--            <button @click="${this.onSubmit}">add</button><br>-->
             <ns-list .rows="${this.notes}" itemTagName="ns-note-list-note" minRowHeight="70"></ns-list>
         `;
     }

@@ -37,7 +37,7 @@ export class NoteListNote extends LitElement {
     render() {
         return html`
             <div class="note">
-                ${unsafeHTML(this.value.value)}
+                ${this.value.id}: ${unsafeHTML(this.value.value)}
                 <div class="date">${dateDirective(this.value.created)}</div>
             </div>
         `;

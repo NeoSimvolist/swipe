@@ -61,7 +61,9 @@ export class NoteService {
         const db = await this.dbService.getDb();
         const transaction = db.transaction(['notes'], 'readonly');
         const objectStore = transaction.objectStore('notes');
-        const index = objectStore.index('id');
+        const index = objectStore.index('created');
+        // Пример фильтрации по диапазону времени
+        // const cursor = index.openCursor(IDBKeyRange.bound((new Date(2021, 8, 3, 11)).getTime(), (new Date(2021, 8, 3, 12)).getTime()), 'prev');
         const cursor = index.openCursor(null, 'prev');
         return fromDbCursorRequest<INote>(cursor, {offset: 0, limit: 0});
     }

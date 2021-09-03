@@ -11,6 +11,7 @@ export class DbService {
                 const db: IDBDatabase = (event.target as any).result;
                 const notesStore = db.createObjectStore('notes', {keyPath: 'id', autoIncrement: true});
                 notesStore.createIndex('value', 'value', {unique: false});
+                notesStore.createIndex('created', 'created', {unique: false});
                 notesStore.createIndex('id', 'id', {unique: true});
             });
             request.addEventListener('success', () => {
