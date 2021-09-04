@@ -1,5 +1,5 @@
-import {LitElement, css, html} from 'lit';
-import {customElement, property, state, query} from 'lit/decorators.js';
+import {LitElement, css, html, PropertyValues, nothing} from 'lit';
+import {customElement, property, query, state} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
 import {virtualScrollDriver} from '../core/virtual-scroll-driver';
 import {ListEvents} from './_models';
@@ -41,16 +41,7 @@ export class List extends LitElement {
       `;
 
     @property({type: Array})
-    get rows(): unknown[] {
-        return this._rows;
-    }
-
-    set rows(value: unknown[]) {
-        const oldValue = this._rows;
-        this._rows = value;
-        this.scrollState = this.getScrollState();
-        this.requestUpdate('rows', oldValue);
-    }
+    rows: unknown[];
 
     @property({type: Number})
     minRowHeight: number = 35;
@@ -65,7 +56,6 @@ export class List extends LitElement {
     private scrollState: any = {};
 
     private isScrollDown: boolean;
-    private _rows: unknown[];
 
     render() {
         return html`
@@ -77,21 +67,38 @@ export class List extends LitElement {
                     class="list-body"
                     style=${styleMap(this.scrollState.targetHeight ? {height: this.scrollState.targetHeight + 'px'} : {})}
                 >
-                    <div style=${styleMap({height: this.scrollState.topPlaceholderHeight + 'px'})}></div>
-                    ${this.rows?.slice(this.scrollState.firstMiddleItem, this.scrollState.firstMiddleItem + this.scrollState.middleItemCount)?.map(row => this.renderBodyRow(row))}
-                    <div style=${styleMap({height: this.scrollState.middlePlaceholderHeight + 'px'})}></div>
-                    ${this.rows?.slice(-this.scrollState.lastItemCount)?.map(row => this.renderBodyRow(row))}
+                    ${this.renderTopPlaceholder()}
+                    ${this.scrollState.middleItemCount ? this.renderBodyRows(this.scrollState.firstMiddleItem, this.scrollState.middleItemCount) : nothing}
+                    ${this.renderMiddlePlaceholder()}
+                    ${this.scrollState.lastItemCount ? this.renderBodyRows(this.rows.length - this.scrollState.lastItemCount, this.scrollState.lastItemCount) : nothing}
                 </div>
             </div>`;
     }
 
-    renderBodyRow(row: unknown) {
+    renderTopPlaceholder() {
+        return this.scrollState.topPlaceholderHeight ? html`<div style=${styleMap({height: this.scrollState.topPlaceholderHeight + 'px'})}></div>` : nothing;
+    }
+
+    renderMiddlePlaceholder() {
+        return this.scrollState.middlePlaceholderHeight ? html`<div style=${styleMap({height: this.scrollState.middlePlaceholderHeight + 'px'})}></div>` : nothing;
+    }
+
+    renderBodyRows(start: number, count: number) {
+        return html`${this.rows?.slice(start, start + count)?.map((row, index) => this.renderBodyRow(row, start + index))}`;
+    }
+
+    renderBodyRow(row: unknown, index: number) {
         if (this.itemTagName) {
             const tagName = literal`${unsafeStatic(this.itemTagName)}`;
-            return staticHtml`<${tagName} value="${row}"></${tagName}>`;
+            return staticHtml`<${tagName} value="${row}" data-index="${index}"></${tagName}>`;
         }
 
-        return html`<div class="list-row">${row}</div>`;
+        return html`<div class="list-row" data-index="${index}">${row}</div>`;
+    }
+
+    updated(changedProperties: PropertyValues) {
+        if (!changedProperties.has('rows')) return;
+        this.scrollState = this.getScrollState();
     }
 
     /**
@@ -116,7 +123,6 @@ export class List extends LitElement {
      * Возвращает состояние виртуального скроллинга
      */
     private getScrollState() {
-        const minRowHeight = this.minRowHeight;
         return virtualScrollDriver(
             {
                 totalItems: this.rows.length,
@@ -125,9 +131,7 @@ export class List extends LitElement {
                 scrollTop: this.listEl?.scrollTop ?? 0
             },
             this.scrollState,
-            function getRenderedItemHeight(itemIndex) {
-                return minRowHeight;
-            }
+            itemIndex => this.shadowRoot.querySelector(`[data-index="${itemIndex}"`)?.getBoundingClientRect().height ?? 0
         );
     }
 }

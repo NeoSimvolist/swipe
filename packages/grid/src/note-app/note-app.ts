@@ -35,7 +35,7 @@ export class NoteApp extends LitElement {
 
         this.showLastNote();
         this.showNotes();
-        // this.runGenerateData();
+        this.runGenerateData();
     }
 
     onKeypress(event: KeyboardEvent) {
@@ -81,8 +81,8 @@ export class NoteApp extends LitElement {
                 this.requestUpdate();
                 setTimeout(() => {
                     this.onSubmit();
-                }, 300);
+                }, 200);
             });
-        }, 1000);
+        }, 500);
     }
 }

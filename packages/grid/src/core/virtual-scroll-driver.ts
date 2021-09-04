@@ -61,6 +61,8 @@ export function virtualScrollDriver(props, oldState, getRenderedItemHeight) {
             lastItemsHeight += lastItemSize < props.minRowHeight ? props.minRowHeight : lastItemSize;
             lastVisibleItems++;
         }
+        // Иначе при инициализации высота контейнера будет расчитана неверно из за деления на 0
+        lastItemSize = lastItemSize || props.minRowHeight;
         newState.scrollHeightInItems = props.totalItems - lastVisibleItems + (lastItemsHeight - viewportHeight) / lastItemSize;
         // Calculate heights of the rest of items
         while (lastVisibleItems < newState.viewportItemCount) {
