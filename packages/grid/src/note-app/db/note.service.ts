@@ -36,6 +36,10 @@ function fromDbCursorRequest<T>(request: IDBRequest<IDBCursorWithValue>, {offset
     });
 }
 
+export interface ISearchFilter {
+    date?: {lower: number, upper: number};
+}
+
 export class NoteService {
 
     dbService = dbService;
@@ -57,14 +61,13 @@ export class NoteService {
         return fromDbCursorRequest<INote>(index.openCursor(null, 'prev'), {offset: 0, limit: 1}).then(result => result?.[0] ?? null);
     }
 
-    async search(): Promise<INote[]> {
+    async search(filter?: ISearchFilter): Promise<INote[]> {
         const db = await this.dbService.getDb();
         const transaction = db.transaction(['notes'], 'readonly');
         const objectStore = transaction.objectStore('notes');
         const index = objectStore.index('created');
-        // Пример фильтрации по диапазону времени
-        // const cursor = index.openCursor(IDBKeyRange.bound((new Date(2021, 8, 3, 11)).getTime(), (new Date(2021, 8, 3, 12)).getTime()), 'prev');
-        const cursor = index.openCursor(null, 'prev');
+        const query = filter?.date ? IDBKeyRange.bound(filter.date.lower, filter.date.upper) : null;
+        const cursor = index.openCursor(query, 'prev');
         return fromDbCursorRequest<INote>(cursor, {offset: 0, limit: 0});
     }
 }

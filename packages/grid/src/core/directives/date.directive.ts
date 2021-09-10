@@ -21,6 +21,7 @@ export class DateDirective extends Directive {
     }
 
     private getDateString(value: number): string {
+        if (!value) return '-';
         return createDate(new Date(value));
     }
 }
