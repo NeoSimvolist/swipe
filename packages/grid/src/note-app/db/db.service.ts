@@ -13,6 +13,15 @@ export class DbService {
                 notesStore.createIndex('value', 'value', {unique: false});
                 notesStore.createIndex('created', 'created', {unique: false});
                 notesStore.createIndex('id', 'id', {unique: true});
+
+                const tagsStore = db.createObjectStore('tags', {keyPath: 'id', autoIncrement: true});
+                tagsStore.createIndex('value', 'value', {unique: true});
+                tagsStore.createIndex('id', 'id', {unique: true});
+
+                const notesTagsStore = db.createObjectStore('notesTags', {keyPath: 'id', autoIncrement: true});
+                notesTagsStore.createIndex('notesId', 'notesId');
+                notesTagsStore.createIndex('tagsId', 'tagsId');
+                notesTagsStore.createIndex('notesTagsIds', ['notesId', 'tagsId'], {unique: true});
             });
             request.addEventListener('success', () => {
                 this.cache = request.result;
