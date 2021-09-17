@@ -20,12 +20,14 @@ export class NoteListNote extends LitElement {
         overflow: hidden;
         background: yellow;
         border-radius: 10px;
+        pointer-events: none;
       }
 
       :host .date {
         font-size: 12px;
         color: #a2a244;
         margin-top: 5px;
+        pointer-events: none;
       }
     `;
 

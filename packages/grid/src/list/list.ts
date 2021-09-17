@@ -1,44 +1,61 @@
 import {LitElement, css, html, PropertyValues, nothing} from 'lit';
 import {customElement, property, query, state} from 'lit/decorators.js';
 import {styleMap} from 'lit/directives/style-map.js';
+import {classMap} from 'lit/directives/class-map.js';
 import {virtualScrollDriver} from '../core/virtual-scroll-driver';
-import {ListEvents} from './_models';
+import { IListItem, ListEvents } from './_models';
 import debounce from 'debounce';
 import { literal, unsafeStatic, html as staticHtml } from 'lit/static-html.js';
+import { Selectable } from '../core/selectable';
 
 @customElement('ns-list')
 export class List extends LitElement {
 
     static styles = css`
-        :host {
-          display: flex;
-          font-family: var(--ns-grid-font-family);
-          font-size: var(--ns-grid-font-size);
-        }
-        
-        :host .list {
-          position: relative;
-          flex-grow: 1;
-          flex-direction: column;
-          border-spacing: 0;
-          overflow-y: auto;
-          overflow-anchor: none;
-        }
-        
-        :host .list-body {
-          overflow: hidden;
-        }
-        
-        :host .list-row {
-          display: flex;
-          flex-grow: 1;
-          padding: 8px;
-        }
-        
-        :host .list-row:not(:last-child) {
-          border-bottom: 1px solid #dee2e6;
-        }
-      `;
+      :host {
+        display: flex;
+        font-family: var(--ns-grid-font-family);
+        font-size: var(--ns-grid-font-size);
+      }
+
+      :host .list {
+        position: relative;
+        flex-grow: 1;
+        flex-direction: column;
+        border-spacing: 0;
+        overflow-y: auto;
+        overflow-anchor: none;
+      }
+
+      :host .list-body {
+        overflow: hidden;
+      }
+
+      :host .list-row {
+        display: flex;
+        flex-grow: 1;
+        padding: 8px;
+      }
+
+      :host .selected {
+        position: relative;
+      }
+
+      :host .selected:before {
+        content: ' ';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.1);
+        pointer-events: none;
+      }
+
+      :host .list-row:not(:last-child) {
+        border-bottom: 1px solid #dee2e6;
+      }
+    `;
 
     @property({type: Array})
     rows: unknown[];
@@ -49,6 +66,14 @@ export class List extends LitElement {
     @property({type: String})
     itemTagName: string;
 
+    @property({type: String})
+    selectableKeyName: string;
+
+    @property({type: Boolean})
+    selectableMulti: boolean;
+
+    selectable: Selectable<unknown> = new Selectable<unknown>(null, false);
+
     @query('.list')
     private listEl: HTMLElement;
 
@@ -56,6 +81,32 @@ export class List extends LitElement {
     private scrollState: any = {};
 
     private isScrollDown: boolean;
+
+    connectedCallback() {
+        super.connectedCallback();
+        // Чтобы работал фокус и событие keydown
+        this.setAttribute('tabindex', '-1');
+        this.addEventListener('keydown', this.onHostKeydown);
+    }
+
+    disconnectedCallback() {
+        this.removeEventListener('keydown', this.onHostKeydown);
+        super.disconnectedCallback();
+    }
+
+    onHostKeydown(event: KeyboardEvent) {
+        if (event.code === 'ArrowDown') {
+            console.log('Вниз');
+        } else if (event.code === 'ArrowUp') {
+            console.log('Вверх');
+        }
+    }
+
+    onRowClick(event: PointerEvent) {
+        const item: IListItem = event.composedPath()[0] as any;
+        this.selectable.toggleSelect(item.value);
+        this.requestUpdate();
+    }
 
     render() {
         return html`
@@ -90,13 +141,19 @@ export class List extends LitElement {
     renderBodyRow(row: unknown, index: number) {
         if (this.itemTagName) {
             const tagName = literal`${unsafeStatic(this.itemTagName)}`;
-            return staticHtml`<${tagName} value="${row}" data-index="${index}"></${tagName}>`;
+            return staticHtml`<${tagName} .value="${row}" data-index="${index}" @click="${this.onRowClick}" class="${classMap({'selected': this.selectable.isSelected(row)})}"></${tagName}>`;
         }
 
-        return html`<div class="list-row" data-index="${index}">${row}</div>`;
+        return html`
+            <div class="list-row" data-index="${index}" @click="${this.onRowClick}"
+                 class="${classMap({'selected': this.selectable.isSelected(row)})}">${row}
+            </div>`;
     }
 
     updated(changedProperties: PropertyValues) {
+        if (changedProperties.has('compareKeyName') || changedProperties.has('selectableMulti')) {
+            this.selectable = new Selectable<unknown>(this.selectableKeyName, this.selectableMulti);
+        }
         if (!changedProperties.has('rows')) return;
         this.scrollState = this.getScrollState();
     }

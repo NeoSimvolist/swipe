@@ -1,7 +1,7 @@
 import { LitElement, css, html } from 'lit';
 import { customElement } from 'lit/decorators.js';
-import { ISearchFilter, noteService } from './db/note.service';
-import { tagService } from './db/tag.service';
+import { INote, ISearchFilter, noteService } from './db/note.service';
+import { ITag, tagService } from './db/tag.service';
 
 function getRandomArbitrary(min, max) {
     return Math.random() * (max - min) + min;
@@ -66,8 +66,8 @@ export class NoteApp extends LitElement {
     tagService = tagService;
     noteValue: string;
     tagValue: string;
-    notes: string[] = [];
-    tags: string[] = [];
+    notes: INote[] = [];
+    tags: ITag[] = [];
     currentDate: number | null = null;
     searchFilter: ISearchFilter | null;
 
@@ -77,14 +77,14 @@ export class NoteApp extends LitElement {
                 <div class="app-tags">
                     <ns-rich-input .value="${this.tagValue}" @richValueChange="${this.onTagInputChange}"
                                    @keypress="${this.onTagKeypress}"></ns-rich-input>
-                    <ns-list .rows="${this.tags}" itemTagName="ns-note-list-tag">
+                    <ns-list .rows="${this.tags}" itemTagName="ns-note-list-tag" .selectableKeyName="id" .selectableMulti="${false}">
                 </div>
                 <div class="app-content">
                     <ns-rich-input .value="${this.noteValue}" @richValueChange="${this.onNoteInputChange}"
                                    @keypress="${this.onNoteKeypress}"></ns-rich-input>
                     <ns-note-date-filter .current="${this.currentDate}"
                                          @nsNoteDateFilter="${this.onChangeDate}"></ns-note-date-filter>
-                    <ns-list .rows="${this.notes}" itemTagName="ns-note-list-note" minRowHeight="70"></ns-list>
+                    <ns-list .rows="${this.notes}" itemTagName="ns-note-list-note" minRowHeight="70" .selectableKeyName="id" .selectableMulti="${true}"></ns-list>
                 </div>
             </div>
 
@@ -169,7 +169,7 @@ export class NoteApp extends LitElement {
     private showNotes() {
         this.noteService.search(this.searchFilter)
             .then(notes => {
-                this.notes = notes.map(note => JSON.stringify(note));
+                this.notes = notes;
                 this.requestUpdate();
             });
     }
@@ -177,7 +177,7 @@ export class NoteApp extends LitElement {
     private showTags() {
         this.tagService.search()
             .then(tags => {
-                this.tags = tags.map(tag => JSON.stringify(tag));
+                this.tags = tags;
                 this.requestUpdate();
             });
     }
